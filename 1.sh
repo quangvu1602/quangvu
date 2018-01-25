@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt-get install python-software-properties -y
 
-sudo add-apt-repository ppa:ondrej/php
+sudo add-apt-repository ppa:ondrej/php -y
 
 sudo apt-get update
 sudo apt-get install -y git screen  php7.2 php7.2-gmp
