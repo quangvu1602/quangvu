@@ -1,33 +1,25 @@
 #!/usr/bin/php
 <?php
 echo "######################\n";
-echo "# Arionum Miner v0.1 #\n";
+echo "# Arionum Miner v0.2 #\n";
 echo "# www.arionum.com    #\n";
 echo "######################\n\n";
 error_reporting(0);
 if (!extension_loaded("gmp")) die("gmp php extension missing");
 if(floatval(phpversion())<7.2) die("The minimum php version required is 7.2");
 if (!defined("PASSWORD_ARGON2I")) die("The php version is not compiled with argon2i support");
-
 ini_set("memory_limit","5G");
-
 $type=trim($argv[1]);
-
 $node=trim($argv[2]);
 $public_key=trim($argv[3]);
 $private_key=trim($argv[4]);
-
-
 if(empty($type)||empty($public_key)||empty($node)||($type=="solo"&&empty($private_key))){
 echo "Usage:
-
 For Solo mining: ./miner solo <node> <public_key> <private_key>
-
 For Pool mining: ./miner pool <pool-address> <your-address>\n\n";
 exit;
 }
 if($type=="pool") $private_key=$public_key;
-
    //all credits for this base58 functions should go to tuupola / https://github.com/tuupola/base58/
     function baseConvert(array $source, $source_base, $target_base)
     {
@@ -65,7 +57,6 @@ if($type=="pool") $private_key=$public_key;
             return chr($ascii);
         }, $converted));
     }
-
 class Miner {
     private $public_key;
     private $private_key;
@@ -85,14 +76,12 @@ class Miner {
 				$this->type=$type;
 				$this->worker=$worker;				
 	}
-
 	public function update(){
 		$this->last_update=time();
 		echo "--> Updating mining info\n";
 		$extra="";
 		if($this->type=="pool") $extra="&worker=".$this->worker."&address=".$this->private_key."&hashrate=".$this->speed;
 		 $res=file_get_contents($this->node."/mine.php?q=info".$extra);
-
         	 $info=json_decode($res,true);
        		 if($info['status']!="ok") return false;
 		$data=$info['data'];
@@ -108,13 +97,9 @@ class Miner {
 		return true;
 	}
 	private function submit($nonce,$argon){
-
-		$argon=substr($argon,29);
+		$argon=substr($argon,30);
 		echo "--> Submitting nonce $nonce / $argon\n";
-
 		
-
-
 		$postdata = http_build_query(
 			array(
 				'argon' => $argon,
@@ -137,7 +122,6 @@ class Miner {
 		
 		$res = file_get_contents($this->node."/mine.php?q=submitNonce", false, $context);
 		$data=json_decode($res,true);
-
 		if($data['status']=="ok") echo "\n--> Nonce confirmed.\n";
 		else echo "--> The nonce did not confirm.\n\n";
 		
@@ -155,17 +139,14 @@ class Miner {
 	        $nonce=base64_encode(openssl_random_pseudo_bytes(32));
         	$nonce = preg_replace("/[^a-zA-Z0-9]/", "", $nonce);
 			$base=$this->public_key."-".$nonce."-".$this->block."-".$this->difficulty;
-			$argon=password_hash($base, PASSWORD_ARGON2I, array('memory_cost' => 16384, "time_cost"=>4, "threads"=>4));
-
+			$argon=password_hash($base, PASSWORD_ARGON2I, array('memory_cost' => 424288, "time_cost"=>1, "threads"=>1));
 			$hash=$base.$argon;
 			for($i=0;$i<5;$i++){
 				$hash=hash("sha512",$hash,true);
 			}		
 			$hash=hash("sha512",$hash);
 			
-
 			$m=str_split($hash,2);
-
 			$duration=hexdec($m[10]).hexdec($m[15]).hexdec($m[20]).hexdec($m[23]).hexdec($m[31]).hexdec($m[40]).hexdec($m[45]).hexdec($m[55]);
 			$duration=ltrim($duration, '0');
 						
@@ -175,33 +156,25 @@ class Miner {
 				
 			}
 			$it++;
-			if($it==100){ 
+			if($it==10){ 
 				$it=0;
 				$end=microtime(true);
-				$this->speed=100/($end-$start);
+				$this->speed=10/($end-$start);
 				$start=$end;
 			}
 			
 		}
-
 	}	
-
-
 }
 //checking if the address is valid
 if($type=="pool"){
 	$dst_b=base58_decode($public_key);
 	if(strlen($dst_b)!=64)  die("ERROR: Invalid Arionum address!");
 }
-
 $worker=uniqid();
-
 $miner= new Miner;
 $miner->prepare($public_key,$private_key, $node,$type,$worker);
 $res=$miner->update();
 if(!$res) die("ERROR: Could not get mining info frm the node");
-
 $miner->run();
-
-
 ?>
