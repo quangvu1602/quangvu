@@ -90,7 +90,7 @@ wget https://bitbucket.org/cryptogone/ariocppminer/downloads/ariocppminer_v0.9.5
 tar -zxf ariocppminer_v0.9.5_ubuntu16_server.tar.gz
 echo "pool
 http://aropool.com/
-C5tkic7wXWtyk4YfZoF7f9GWANTk8FjBAGreLcHooMqfdHogm1F3tGTErDdio9njdpaLMtPxdMXswJk6NVvpkqE
+47VJTSocAAVkfoJ2o2fW4bQiiukiiAFNvWPsCfgcWZ5FZthq7HJxBMHo9rRe8jvRfSireoZYLJGWY2GTaYWs4M54
 `nproc`
 enhanced
 true
