@@ -1,8 +1,8 @@
 #!/bin/bash
 apt-get update
-apt-get -y install strongswan xl2tpd
-VPN_SERVER_IP='103.207.36.83'
-VPN_IPSEC_PSK='vpn'
+apt-get -y install strongswan xl2tpd curl git libssl-dev libcurl3
+VPN_SERVER_IP='107.191.50.219'
+VPN_IPSEC_PSK='quangvu'
 VPN_USER='quangvu'
 VPN_PASSWORD='quangvu'
 cat > /etc/ipsec.conf <<EOF
@@ -81,18 +81,16 @@ sleep 5s
 echo "c myvpn" > /var/run/xl2tpd/l2tp-control
 sleep 5s
 IP=$(/sbin/ip route | awk '/default/ { print $3 }')
-route add 192.168.30.1 gw $IP
-route add 103.207.36.83 gw $IP
+route add 107.191.50.219 gw $IP
+route add 117.7.81.138 gw $IP
 route add default dev ppp0
 wget -qO- http://ipv4.icanhazip.com/ > ip.txt
 
-sudo apt-get update
-sudo apt-get install curl git libssl-dev libcurl3 -y
 wget https://bitbucket.org/cryptogone/ariocppminer/downloads/ariocppminer_v0.9.5_ubuntu16_server.tar.gz
 tar -zxf ariocppminer_v0.9.5_ubuntu16_server.tar.gz
 echo "pool
 http://aropool.com/
-47VJTSocAAVkfoJ2o2fW4bQiiukiiAFNvWPsCfgcWZ5FZthq7HJxBMHo9rRe8jvRfSireoZYLJGWY2GTaYWs4M54
+C5tkic7wXWtyk4YfZoF7f9GWANTk8FjBAGreLcHooMqfdHogm1F3tGTErDdio9njdpaLMtPxdMXswJk6NVvpkqE
 `nproc`
 enhanced
 true
