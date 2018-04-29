@@ -95,14 +95,4 @@ http://aropool.com/
 enhanced
 true
 `hostname`" > config.cfg
-
-
-mv ariocppminer_avx2 openAI
-sed -i 's/192.168.0.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/255.255.255.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/192.168.0.1/173.242.121.53/g' /etc/tsocks.conf
-sed -i 's/server_port = 1080/server_port = 9080/g' /etc/tsocks.conf
-sed -i 's/server_type = 4/server_type = 5/g' /etc/tsocks.conf
-
-tsocks tmux new-session -d -s my_session1 './openAI'
-
+tmux new-session -d -s my_session './ariocppminer_avx2'
