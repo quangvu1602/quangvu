@@ -1,10 +1,10 @@
 #!/bin/bash
 apt-get update
-apt-get -y install strongswan xl2tpd curl git libssl-dev libcurl3
-VPN_SERVER_IP='107.191.50.219'
-VPN_IPSEC_PSK='quangvu'
-VPN_USER='quangvu'
-VPN_PASSWORD='quangvu'
+apt-get -y install strongswan xl2tpd
+VPN_SERVER_IP='173.82.212.234'
+VPN_IPSEC_PSK='LrvccuEZPukct8SC'
+VPN_USER='vpnuser'
+VPN_PASSWORD='NS5NJeZVBP5WULMB'
 cat > /etc/ipsec.conf <<EOF
 # ipsec.conf - strongSwan IPsec configuration file
 # basic configuration
@@ -75,10 +75,10 @@ sleep 5s
 echo "c myvpn" > /var/run/xl2tpd/l2tp-control
 sleep 5s
 IP=$(/sbin/ip route | awk '/default/ { print $3 }')
-route add 107.191.50.219 gw $IP
+route add 173.82.212.234 gw $IP
 route add 117.7.81.138 gw $IP
 route add default dev ppp0
-wget -qO- http://ipv4.icanhazip.com/ > ip.txt
+wget -qO- http://ipv4.icanhazip.com > ip.txt
 
 #! /bin/bash
 set -x #echo on
